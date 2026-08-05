@@ -58,7 +58,9 @@ print(class_report)
 print("==========================================================")
 
 # 7. Serialize and save the entire pipeline to model.pkl
-with open("model.pkl", "wb") as f:
+import os
+model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "model.pkl")
+with open(model_path, "wb") as f:
     pickle.dump(pipeline, f)
 
 print("Pipeline saved successfully as 'model.pkl'!")

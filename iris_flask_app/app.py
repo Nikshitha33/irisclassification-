@@ -9,7 +9,8 @@ from lime.lime_tabular import LimeTabularExplainer
 app = Flask(__name__)
 
 # Load the trained machine learning pipeline
-model = pickle.load(open("model.pkl", "rb"))
+model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "model.pkl")
+model = pickle.load(open(model_path, "rb"))
 
 # Load Iris metadata to construct the LIME explainer
 iris = load_iris()
