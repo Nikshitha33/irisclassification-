@@ -1,0 +1,5 @@
+Flask>=3.1.0
+numpy>=2.1.2
+scikit-learn>=1.6.0
+scipy>=1.15.2
+lime>=0.2.0

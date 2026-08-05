@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Iris Flower Classification</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.app-container {
+    display: flex;
+    gap: 20px;
+    max-width: 1000px;
+    width: 100%;
+    justify-content: center;
+    align-items: stretch;
+}
+
+@media (max-width: 900px) {
+    .app-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0px 10px 25px rgba(0,0,0,0.3);
+    text-align:center;
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.explanation-card {
+    text-align: left;
+    width: 520px;
+}
+
+.explanation-card h2 {
+    font-size: 20px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #764ba2;
+    padding-bottom: 6px;
+}
+
+.explanation-card h3 {
+    font-size: 14px;
+    color: #495057;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 4px;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: #666;
+    margin-top: -5px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+h2{
+    color:#333;
+    margin-top: 0;
+}
+
+input{
+    width:90%;
+    padding:10px;
+    margin:8px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button{
+    padding:12px 20px;
+    border:none;
+    background:#2575fc;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+    width: 90%;
+    margin-top: 10px;
+}
+
+button:hover{
+    background:#6a11cb;
+    transform:scale(1.03);
+}
+
+.result{
+    margin-top:20px;
+    font-size:18px;
+    font-weight:bold;
+    color:#333;
+}
+
+.probability {
+    font-size: 14px;
+    color: #28a745;
+    margin-top: 4px;
+    font-weight: normal;
+}
+
+.flower-img{
+    margin-top:15px;
+    width:180px;
+    border-radius:10px;
+    align-self: center;
+    animation:fadeIn 1s ease-in-out;
+}
+
+/* Narrative Interpretation Styling */
+.narrative-section {
+    text-align: left;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+}
+
+.narrative-section h3 {
+    margin-top: 0;
+    font-size: 14px;
+    color: #495057;
+    border-bottom: 2px solid #764ba2;
+    padding-bottom: 4px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.narrative-body p {
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin: 10px 0;
+    color: #495057;
+}
+
+.narrative-body strong {
+    color: #212529;
+}
+
+.highlight {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+.highlight.positive {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.highlight.neutral {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #495057;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 6px;
+    margin: 2px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+.badge.positive-badge {
+    background-color: #e2f0d9;
+    color: #385723;
+}
+
+.badge.negative-badge {
+    background-color: #fce4d6;
+    color: #c65911;
+}
+
+.badge.neutral-badge {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.trust-indicator {
+    font-weight: bold;
+}
+
+.trust-indicator.high {
+    color: #198754;
+}
+
+.trust-indicator.moderate {
+    color: #fd7e14;
+}
+
+.trust-indicator.low {
+    color: #dc3545;
+}
+
+/* Model Summary Styling */
+.model-summary-box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-left: 4px solid #764ba2;
+    border-top: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.model-summary-box h3 {
+    margin-top: 0;
+    font-size: 12px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    color: #495057;
+    border: none;
+    padding: 0;
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+}
+
+.summary-table td {
+    padding: 3px 0;
+    line-height: 1.4;
+}
+
+.summary-table td:first-child {
+    width: 110px;
+    color: #666;
+    font-weight: bold;
+}
+
+/* Collapsible LIME Guide Styling */
+.lime-guide-details {
+    background: #e8f4fd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 12px;
+    border: 1px solid #bbeeeb;
+}
+
+.lime-guide-summary {
+    font-weight: bold;
+    cursor: pointer;
+    color: #0d6efd;
+    outline: none;
+}
+
+.lime-guide-content {
+    margin-top: 8px;
+    line-height: 1.4;
+    color: #333;
+}
+
+.lime-guide-content ol {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.lime-guide-content li {
+    margin-bottom: 4px;
+}
+
+/* Contributions List Styling */
+.contrib-list {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+}
+
+.contrib-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.contrib-item.positive {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border-left: 5px solid #198754;
+}
+
+.contrib-item.negative {
+    background-color: #f8d7da;
+    color: #842029;
+    border-left: 5px solid #dc3545;
+}
+
+.contrib-item .sign {
+    font-weight: bold;
+}
+
+.contrib-item .weight {
+    font-weight: bold;
+}
+
+.lime-report-iframe {
+    width: 100%;
+    height: 240px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    margin-top: 8px;
+}
+
+.report-link-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.report-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #764ba2;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.report-btn:hover {
+    background: #667eea;
+    transform: scale(1.02);
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:scale(0.8);}
+    to{opacity:1; transform:scale(1);}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+<div class="card">
+
+<h2>🌸 Iris Flower Predictor</h2>
+
+<form action="/predict" method="post">
+
+<input type="text" name="f1" placeholder="Sepal Length" value="{{f1 if f1 else ''}}" required>
+<input type="text" name="f2" placeholder="Sepal Width" value="{{f2 if f2 else ''}}" required>
+<input type="text" name="f3" placeholder="Petal Length" value="{{f3 if f3 else ''}}" required>
+<input type="text" name="f4" placeholder="Petal Width" value="{{f4 if f4 else ''}}" required>
+
+<br>
+
+<button type="submit">Predict Flower</button>
+
+</form>
+
+{% if prediction_text %}
+<div class="result">
+{{ prediction_text }}
+{% if prediction_proba %}
+<div class="probability">Confidence: {{ prediction_proba }}</div>
+{% endif %}
+</div>
+{% endif %}
+
+{% if flower_image %}
+<img class="flower-img" src="{{ flower_image }}">
+{% endif %}
+
+<!-- Human Readable Narrative Interpretation Section -->
+{% if narrative %}
+<div class="narrative-section">
+  <h3>🔍 Human-Readable Interpretation</h3>
+  <div class="narrative-body">
+    <p><strong>Why was this predicted?</strong><br>
+    {{ narrative.why_predicted }}.</p>
+    
+    <p><strong>Strongest impact indicator:</strong><br>
+    <span class="highlight positive">{{ narrative.most_contributed }}</span></p>
+    
+    <p><strong>Weakest impact indicator:</strong><br>
+    <span class="highlight neutral">{{ narrative.least_contributed }}</span></p>
+    
+    <p><strong>Supporting criteria met:</strong><br>
+    {% if narrative.supporting %}
+      {% for rule in narrative.supporting %}
+        <span class="badge positive-badge">{{ rule }}</span>
+      {% endfor %}
+    {% else %}
+      <span class="badge neutral-badge">None</span>
+    {% endif %}</p>
+    
+    <p><strong>Opposing criteria met:</strong><br>
+    {% if narrative.opposing %}
+      {% for rule in narrative.opposing %}
+        <span class="badge negative-badge">{{ rule }}</span>
+      {% endfor %}
+    {% else %}
+      <span class="badge neutral-badge">None</span>
+    {% endif %}</p>
+    
+    <p><strong>Prediction Trustworthiness:</strong><br>
+    <span class="trust-indicator {{ narrative.trustworthiness_level | lower }}">
+      ● {{ narrative.trustworthiness_level }} Trust
+    </span> - {{ narrative.trustworthiness_reason }}</p>
+    
+    <p><strong>Explanation Scope:</strong><br>
+    <strong>{{ narrative.explanation_scope }} explanation.</strong> This profile describes the localized model behaviors adjacent to this test vector, not global rules.</p>
+  </div>
+</div>
+{% endif %}
+
+</div>
+
+{% if features_contrib %}
+<div class="card explanation-card">
+<h2>💡 LIME Explanation Dashboard</h2>
+<p class="subtitle">Local model interpretation for this specific prediction instance</p>
+
+<!-- Model Summary Section -->
+<div class="model-summary-box">
+  <h3>⚙️ Model Summary</h3>
+  <table class="summary-table">
+    <tr><td><strong>Algorithm:</strong></td><td>Weighted KNN</td></tr>
+    <tr><td><strong>K Value:</strong></td><td>5</td></tr>
+    <tr><td><strong>Explainability:</strong></td><td>LIME (Local Interpretable Model-agnostic Explanations)</td></tr>
+    <tr><td><strong>Dataset:</strong></td><td>Iris Flower Dataset</td></tr>
+    <tr><td><strong>Pipeline:</strong></td><td>StandardScaler ➔ Weighted KNeighborsClassifier</td></tr>
+  </table>
+</div>
+
+<!-- Collapsible LIME Guide Section -->
+<details class="lime-guide-details">
+  <summary class="lime-guide-summary">📘 How LIME Explained This Prediction?</summary>
+  <div class="lime-guide-content">
+    <p>LIME generates local explanations through a four-step process:</p>
+    <ol>
+      <li><strong>Perturbing Input:</strong> LIME creates replica points by adding small random changes (perturbations) to the input measurements.</li>
+      <li><strong>Making Predictions:</strong> It runs these perturbed points through the production pipeline to get the model's confidence scores.</li>
+      <li><strong>Distance Weighting:</strong> It measures how close the perturbed points are to the original input. Points closer to the input are given higher weights.</li>
+      <li><strong>Fitting a Surrogate Model:</strong> It fits an interpretable linear model on these weighted points. The resulting linear coefficients represent the feature importances displayed below.</li>
+    </ol>
+    <p>This process explains the <strong>local behavior</strong> around the prediction, showing why the model arrived at this specific choice.</p>
+  </div>
+</details>
+
+<h3>Feature Contributions</h3>
+<ul class="contrib-list">
+  {% for item in features_contrib %}
+    <li class="contrib-item {% if item.is_positive %}positive{% else %}negative{% endif %}">
+       <span class="sign">{% if item.is_positive %}▲ Positive{% else %}▼ Negative{% endif %}</span>
+       <span class="rule">{{ item.rule }}</span>
+       <span class="weight">({% if item.is_positive %}+{% endif %}{{ item.weight }})</span>
+    </li>
+  {% endfor %}
+</ul>
+
+<h3>Interactive LIME Report</h3>
+<iframe class="lime-report-iframe" src="/static/lime/explanation.html?t={{ t }}"></iframe>
+
+<div class="report-link-container">
+  <a class="report-btn" href="/static/lime/explanation.html?t={{ t }}" target="_blank">🔗 Open Full Report in New Tab</a>
+</div>
+</div>
+{% endif %}
+
+</div>
+
+</body>
+</html>
