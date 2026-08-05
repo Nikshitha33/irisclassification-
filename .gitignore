@@ -171,5 +171,5 @@ run_err.log
 train.log
 run_err_utf8.log
 *.pkl
-# Optional: Keep model.pkl commented if you want to explicitly check in the trained baseline
-# !model.pkl
+# Explicitly track model.pkl for project deployment
+!iris_flask_app/model.pkl
