@@ -37089,25 +37089,25 @@
 /***/ })
 /******/ ]);
 //# sourceMappingURL=bundle.js.map </script></head><body>
-        <div class="lime top_div" id="top_divXCAQOPWKDFB12HR"></div>
+        <div class="lime top_div" id="top_divADNYTRCFTEHA6GC"></div>
         
         <script>
-        var top_div = d3.select('#top_divXCAQOPWKDFB12HR').classed('lime top_div', true);
+        var top_div = d3.select('#top_divADNYTRCFTEHA6GC').classed('lime top_div', true);
         
             var pp_div = top_div.append('div')
                                 .classed('lime predict_proba', true);
             var pp_svg = pp_div.append('svg').style('width', '100%');
-            var pp = new lime.PredictProba(pp_svg, ["setosa", "versicolor", "virginica"], [1.0, 0.0, 0.0]);
+            var pp = new lime.PredictProba(pp_svg, ["setosa", "versicolor", "virginica"], [0.0, 0.0, 1.0]);
             
         
         var exp_div;
             var exp = new lime.Explanation(["setosa", "versicolor", "virginica"]);
         
                 exp_div = top_div.append('div').classed('lime explanation', true);
-                exp.show([["sepal width (cm) > 3.30", 0.2511583752157959], ["petal width (cm) > 1.80", -0.24434318421255155], ["sepal length (cm) <= 5.10", 0.16263910306100005], ["1.60 < petal length (cm) <= 4.35", 0.002412436328999451]], 0, exp_div);
+                exp.show([["petal width (cm) > 1.80", 0.4672143276146824], ["petal length (cm) > 5.10", 0.29268723868729446], ["sepal width (cm) <= 2.80", 0.06410545808039672], ["5.10 < sepal length (cm) <= 5.80", -0.042418252531661496]], 2, exp_div);
                 
         var raw_div = top_div.append('div');
-            exp.show_raw_tabular([["sepal width (cm)", "4.50", 0.2511583752157959], ["petal width (cm)", "3.40", -0.24434318421255155], ["sepal length (cm)", "2.40", 0.16263910306100005], ["petal length (cm)", "2.60", 0.002412436328999451]], 0, raw_div);
+            exp.show_raw_tabular([["petal width (cm)", "3.60", 0.4672143276146824], ["petal length (cm)", "5.20", 0.29268723868729446], ["sepal width (cm)", "2.40", 0.06410545808039672], ["sepal length (cm)", "5.80", -0.042418252531661496]], 2, raw_div);
         
         </script>
         </body></html>
