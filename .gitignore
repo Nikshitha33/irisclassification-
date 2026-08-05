@@ -173,3 +173,4 @@ run_err_utf8.log
 *.pkl
 # Explicitly track model.pkl for project deployment
 !iris_flask_app/model.pkl
+~$*
